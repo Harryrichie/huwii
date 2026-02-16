@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String   @unique
+
+  firstName    String?
+
+  lastName     String?
+
+  imageUrl     String?
+
+  clerkId      String   @unique
+
+  createdAt    DateTime @default(now())
+
+  updatedAt    DateTime @updatedAt
+  ChatSessions ChatSession[] // New relation
+  History      History[]
+}
+
+model ChatSession {
+  id        String    @id @default(cuid())
+  title     String    @default("New Conversation")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  history   History[] // History now belongs to a session
+}
+
+model History {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionId    String?  // NEW: Link to the session
+  templateSlug String
+  formData     String   @db.Text
+  aiResponse   String?  @db.Text
+  imageUrl     String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  user    User         @relation(fields: [userId], references: [id])
+  session ChatSession? @relation(fields: [sessionId], references: [id])
+}

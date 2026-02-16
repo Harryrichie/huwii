@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "huwii-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,28 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.12",
+    "@ai-sdk/react": "^3.0.41",
+    "@clerk/nextjs": "^6.36.8",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "ai": "^6.0.39",
+    "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "pg": "^8.17.1",
+    "prisma": "^7.2.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
