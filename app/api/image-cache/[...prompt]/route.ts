@@ -1,17 +1,24 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  req: Request,
-  { params }: { params: { prompt: string[] } }
+  req: NextRequest,
+  // Fix: params is now wrapped in a Promise
+  { params }: { params: Promise<{ prompt: string[] }> }
 ) {
   try {
-    // The prompt is URL-encoded and can be split into an array of strings.
-    // We need to decode it and join it back together.
+    // Await the params promise to get the actual data
     const resolvedParams = await params;
+    
+    // Decode and join the catch-all route segments
     const prompt = resolvedParams.prompt.map(p => decodeURIComponent(p)).join('/');
+    
     const API_TOKEN = process.env.HUGGING_FACE_TOKEN;
     const MODEL_ID = "black-forest-labs/FLUX.1-schnell";
     const URL = `https://router.huggingface.co/hf-inference/models/${MODEL_ID}`;
+
+    if (!API_TOKEN) {
+      return NextResponse.json({ error: "Hugging Face token missing" }, { status: 500 });
+    }
 
     const response = await fetch(URL, {
       headers: {
@@ -44,6 +51,7 @@ export async function GET(
 
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+    console.error("Cache Route Crash:", errorMessage);
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
